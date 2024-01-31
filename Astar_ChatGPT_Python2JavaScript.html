@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JavaScript Test</title>
+</head>
+<body>
+    <h1>Resultat du Chemin A*</h1>
+    <div id="pathResult"></div>
+    <script>
+        class Node {
+    constructor(name, heuristic) {
+        this.name = name;
+        this.heuristic = heuristic;
+        this.g = Infinity; // Distance from start node
+        this.f = Infinity; // Total estimated cost
+        this.adjacent = new Map(); // Adjacent nodes and their costs
+        this.parent = null; // Parent node in the path
+    }
+
+    addEdge(neighbor, cost) {
+        this.adjacent.set(neighbor, cost);
+    }
+
+    // JavaScript's sort method needs a compare function, so we define this to use in a priority queue
+    static compare(nodeA, nodeB) {
+        return nodeA.f - nodeB.f;
+    }
+}
+
+class PriorityQueue {
+    constructor() {
+        this.elements = [];
+    }
+
+    enqueue(element) {
+        this.elements.push(element);
+        this.elements.sort(Node.compare);
+    }
+
+    dequeue() {
+        return this.elements.shift(); // Removes the first element from array
+    }
+
+    isEmpty() {
+        return this.elements.length === 0;
+    }
+}
+
+function astar(graph, start, end) {
+    let startNode = graph[start];
+    startNode.g = 0;
+    startNode.f = startNode.heuristic;
+
+    let openList = new PriorityQueue();
+    openList.enqueue(startNode);
+    let closedSet = new Set();
+
+    while (!openList.isEmpty()) {
+        let currentNode = openList.dequeue();
+        closedSet.add(currentNode);
+
+        if (currentNode.name === end) {
+            let path = [];
+            while (currentNode) {
+                path.push(currentNode.name);
+                currentNode = currentNode.parent;
+            }
+            return path.reverse();
+        }
+
+        currentNode.adjacent.forEach((cost, adj) => {
+            let childNode = graph[adj];
+            if (closedSet.has(childNode)) {
+                return;
+            }
+
+            let tentativeGScore = currentNode.g + cost;
+            if (tentativeGScore < childNode.g) {
+                childNode.parent = currentNode;
+                childNode.g = tentativeGScore;
+                childNode.f = tentativeGScore + childNode.heuristic;
+
+                if (!openList.elements.includes(childNode)) {
+                    openList.enqueue(childNode);
+                }
+            }
+        });
+    }
+    return null;
+}
+
+// Example usage
+let nodes = {};
+let heuristics = {'A': 9, 'B': 3, 'C': 4, 'D': 6, 'E': 8, 'F': 4, 'G': 2, 'H': 0};
+Object.keys(heuristics).forEach(node => {
+    nodes[node] = new Node(node, heuristics[node]);
+});
+
+let edges = [
+    ['A', 'B', 2],
+    ['A', 'C', 10],
+    ['A', 'D', 3],
+    ['B', 'E', 18],
+    ['D', 'C', 2],
+    ['D', 'F', 4],
+    ['E', 'H', 10],
+    ['F', 'E', 5],
+    ['F', 'G', 5],
+    ['C', 'G', 2],
+    ['G', 'H', 2]
+];
+
+edges.forEach(edge => {
+    nodes[edge[0]].addEdge(edge[1], edge[2]);
+});
+
+let path = astar(nodes, 'A', 'H');
+console.log("Path found by A*:", path);
+
+const resultElement = document.getElementById('pathResult');
+        const textNode = document.createTextNode("Chemin trouvé par A* : " + path.join(" -> "));
+        resultElement.appendChild(textNode);
+
+    </script>
+</body>
+</html>
