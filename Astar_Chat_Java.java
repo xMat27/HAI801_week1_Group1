@@ -91,13 +91,13 @@ public class Astar_Chat_Java {
         Node nodeH = new Node("H", 0);
 
         // Initialize edges
-        nodeA.adjacencies = new Edge[]{new Edge(nodeB, 2), new Edge(nodeC, 10)};
-        nodeB.adjacencies = new Edge[]{new Edge(nodeD, 3), new Edge(nodeA, 2)};
-        nodeC.adjacencies = new Edge[]{new Edge(nodeA, 10), new Edge(nodeD, 2), new Edge(nodeG, 5)};
-        nodeD.adjacencies = new Edge[]{new Edge(nodeB, 3), new Edge(nodeC, 2), new Edge(nodeE, 18), new Edge(nodeF, 4)};
-        nodeE.adjacencies = new Edge[]{new Edge(nodeD, 18), new Edge(nodeH, 10)};
-        nodeF.adjacencies = new Edge[]{new Edge(nodeD, 4), new Edge(nodeG, 5)};
-        nodeG.adjacencies = new Edge[]{new Edge(nodeF, 5), new Edge(nodeC, 5), new Edge(nodeH, 2)};
+        nodeA.adjacencies = new Edge[]{new Edge(nodeB, 2), new Edge(nodeC, 10),new Edge(nodeD, 3)};
+        nodeB.adjacencies = new Edge[]{new Edge(nodeE, 18), new Edge(nodeA, 2)};
+        nodeC.adjacencies = new Edge[]{new Edge(nodeA, 10), new Edge(nodeD, 2), new Edge(nodeG, 2)};
+        nodeD.adjacencies = new Edge[]{new Edge(nodeC, 2), new Edge(nodeF, 4),new Edge(nodeA, 3)};
+        nodeE.adjacencies = new Edge[]{new Edge(nodeB, 18), new Edge(nodeH, 10), new Edge(nodeF, 5)};
+        nodeF.adjacencies = new Edge[]{new Edge(nodeD, 4), new Edge(nodeG, 5), new Edge(nodeE, 5)};
+        nodeG.adjacencies = new Edge[]{new Edge(nodeF, 5), new Edge(nodeC, 2), new Edge(nodeH, 2)};
         nodeH.adjacencies = new Edge[]{new Edge(nodeE, 10), new Edge(nodeG, 2)};
 
         // Start A* search
